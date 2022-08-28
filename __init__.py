@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+# Задаем параметры доя sql alchemy
 
 def create_app():
     app = Flask(__name__)

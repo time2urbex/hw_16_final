@@ -1,5 +1,7 @@
 from . import db
 
+# Описываем класс User
+
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True, unique=True)
@@ -10,6 +12,7 @@ class User(db.Model):
     role  = db.Column(db.String(50))
     phone  = db.Column(db.String(50))
 
+# Описываем класс Offer
 
 class Offer(db.Model):
     __tablename__ = "offers"
@@ -17,6 +20,8 @@ class Offer(db.Model):
     order_id = db.Column(db.Integer)
     last_name = db.Column(db.String(20))
     executor_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+# Описываем класс Order
 
 
 class Order(db.Model):

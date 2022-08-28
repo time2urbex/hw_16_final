@@ -1,6 +1,7 @@
 import json
 from . import models, db
 
+# Загружаем данные в json
 
 def load_data(filename):
     json_data = []
@@ -9,6 +10,7 @@ def load_data(filename):
 
     return json_data
 
+# Загружаем json спиок с пользователями
 
 def load_users(filename):
     users = load_data(filename)

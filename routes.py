@@ -1,5 +1,8 @@
+from models import User
 from . import models, db
 from flask import current_app as app
+
+# Получаем всех пользователей
 
 @app.route('/users/', methods=['GET', 'POST'])
 def users():
@@ -21,6 +24,9 @@ def users():
             result.append(user.to_dict())
 
         return jsonify(result), 200
+
+# Получаем пользователя по id
+
 
 @app.route('/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def get_user_by_id(uid):
@@ -50,6 +56,7 @@ def get_user_by_id(uid):
 
         return "", 204
 
+# Получаем все офферы
 
 
 @app.route('/offers/', methods=['GET', 'POST'])
@@ -72,6 +79,7 @@ def get_all_offers():
 
         return jsonify(result), 200
 
+#Получаем офферы по id
 
 @app.route('/offers/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def get_offer_by_id(uid):
@@ -97,6 +105,7 @@ def get_offer_by_id(uid):
 
         return "", 204
 
+#Получаем все заказы
 
 @app.route('/orders/', methods=['GET', 'POST'])
 def get_all_orders():
@@ -117,6 +126,8 @@ def get_all_orders():
             result.append(order.to_dict())
 
         return jsonify(result), 200
+
+#Получаем заказ по uid
 
 @app.route('/orders/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def get_order_by_id(uid):
@@ -148,3 +159,132 @@ def get_order_by_id(uid):
         db.session.commit()
 
         return "", 204
+
+
+#Добавление пользователя
+
+@app.route('/users/', methods=['POST', 'PUT', 'DELETE'])
+def add_user(user):
+    max = User(id=3, order_id = 100, last_name='max', executor_id = 32)
+
+    if request.method == "POST":
+      data = requests.json
+      user = db.session.query(User).get(id)
+      user.id = data.get("user")
+      user.order_id = data.get("user")
+      user.last_name = data.get("user")
+      user.executor_id = data.get("user")
+
+
+    db.session.add(user)
+    db.session.commit()
+
+    if request.method == "PUT":
+      data = requests.json
+      user = db.session.query(User).get(id)
+      user.id = data.get("user")
+      user.order_id = data.get("user")
+      user.last_name = data.get("user")
+      user.executor_id = data.get("user")
+
+      db.session.add(user)
+      db.session.commit()
+
+    if request.method == "DELETE":
+        data = requests.json
+        user = db.session.query(User).get(id)
+        user.id = data.get("user")
+        user.order_id = data.get("user")
+        user.last_name = data.get("user")
+        user.executor_id = data.get("user")
+
+
+        db.session.query(user).delete()
+        db.session.commit()
+
+
+#Добавление заказа
+
+@app.route('/orders/', methods=['POST', 'PUT', 'DELETE'])
+def add_order(order):
+
+    if request.method == "POST":
+      data = requests.json
+      order.id = order_data['id']
+      order.name = order_data['name']
+      order.description = order_data['description']
+      order.start_date = order_data['start_date']
+      order.end_date = order_data['end_date']
+      order.adress = order_data['adress']
+      order.price = order_data['price']
+      order.custumer_id = order_data['custumer_id']
+      order.executor_id = order_data['executor_id']
+
+
+    db.session.add(order)
+    db.session.commit()
+
+    if request.method == "PUT":
+      data = requests.json
+      order = db.session.query(Order).get(id)
+      order.id = data.get("id")
+      order.order_id = data.get("order_id")
+      order.last_name = data.get("last_name")
+      order.executor_id = data.get("executor_id")
+
+      db.session.add(user)
+      db.session.commit()
+
+    if request.method == "DELETE":
+        data = requests.json
+        order = db.session.query(Order).get(id)
+        order.id = data.get("id")
+        order.order_id = data.get("order_id")
+        order.last_name = data.get("last_name")
+        order.executor_id = data.get("executor_id")
+
+
+        db.session.query(order).delete()
+        db.session.commit()
+
+
+#Добавление оффер
+
+@app.route('/offers/', methods=['POST', 'PUT', 'DELETE'])
+def add_offer(order):
+
+    if request.method == "POST":]
+      offer_data = request.json(uid)
+      offer.order_id = offer_data['order_id']
+      offer.executor_id = offer_data['executor_id']
+
+      db.session.add(user)
+      db.session.commit()
+
+    db.session.add(order)
+    db.session.commit()
+
+    if request.method == "PUT":
+      data = requests.json
+      offer = db.session.query(Offer).get(id)
+      offer.id = data.get("id")
+      offer.order_id = data.get("order_id")
+      offer.last_name = data.get("last_name")
+      offer.executor_id = data.get("executor_id")
+
+      db.session.add(user)
+      db.session.commit()
+
+    if request.method == "DELETE":
+        data = requests.json
+        order = db.session.query(Order).get(id)
+        order.id = data.get("order")
+        order.order_id = data.get("order")
+        order.last_name = data.get("order")
+        order.executor_id = data.get("order")
+
+
+        db.session.query(order).delete()
+        db.session.commit()
+
+db.create_all()
