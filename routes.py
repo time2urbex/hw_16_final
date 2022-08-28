@@ -253,7 +253,7 @@ def add_order(order):
 @app.route('/offers/', methods=['POST', 'PUT', 'DELETE'])
 def add_offer(order):
 
-    if request.method == "POST":]
+    if request.method == "POST":
       offer_data = request.json(uid)
       offer.order_id = offer_data['order_id']
       offer.executor_id = offer_data['executor_id']
