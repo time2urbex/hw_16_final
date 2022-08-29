@@ -2,7 +2,6 @@ import json
 from run import db
 import models
 
-
 # Загружаем данные в json
 
 def load_data(filename):

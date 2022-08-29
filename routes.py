@@ -1,9 +1,10 @@
-from models import User
+from models import User, Offer, Order
 from run import db
 import models
 from flask import current_app as app
 import json
 from flask import Flask, jsonify
+from migrate import load_data, load_users, load_orders, load_offers
 
 
 # Представление для получения всех пользователей методом get и post
