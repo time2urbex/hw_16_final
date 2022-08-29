@@ -2,7 +2,7 @@ from flask import Flask
 
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+db = SQLAlchemy(app)
 
 # Задаем параметры доя sql alchemy
 

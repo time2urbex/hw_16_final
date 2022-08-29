@@ -1,4 +1,4 @@
-from . import db
+from run import db
 
 # Описываем класс User
 
@@ -33,5 +33,5 @@ class Order(db.Model):
     end_date = db.Column(db.DateTime())
     adress = db.Column(db.String(200))
     price = (db.Integer)
-    customer_id = db.column(db.integer, db.ForeignKey("user.id"))
+    customer_id = db.column(db.Integer, db.ForeignKey("user.id"))
     executor_id = db.Column(db.Integer, db.ForeignKey("users.id"))
