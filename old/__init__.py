@@ -17,6 +17,6 @@ def create_app():
         from . import routes
         db.create_all()
         from . import migrate
-        migrate.load_users('users.json')
+        migrate.load_users('../users.json')
 
     return app

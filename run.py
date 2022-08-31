@@ -1,7 +1,6 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 import json
-
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
@@ -41,12 +40,14 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     description = db.Column(db.String(200))
-    start_date = db.Column(db.DateTime())
-    end_date = db.Column(db.DateTime())
-    adress = db.Column(db.String(200))
-    price = (db.Integer)
-    customer_id = db.column(db.Integer, db.ForeignKey("user.id"))
+    start_date = db.Column(db.String(200))
+    end_date = db.Column(db.String(200))
+    address = db.Column(db.String(200))
+    price = db.Column(db.Integer)
+    customer_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     executor_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+
+db.create_all()
 
 
 # Загружаем данные в json
@@ -65,10 +66,12 @@ def load_users(filename):
     users = load_data(filename)
 
     for user in users:
-        new_user = models.User(**user)
+        new_user = User(**user)
         db.session.add(new_user)
+        db.session.commit()
 
-    print(models.User.get(1).to_dict)
+
+load_users("users.json")
 
 # Загружаем json спиок с orders
 
@@ -76,10 +79,12 @@ def load_orders(filename):
     orders = load_data(filename)
 
     for order in orders:
-        new_order = models.Offer(**order)
+        new_order = Order(**order)
         db.session.add(new_order)
+        db.session.commit()
 
-    print(models.Order.get(1).to_dict)
+
+load_orders("orders.json")
 
 # Загружаем json спиок с offers
 
@@ -87,10 +92,14 @@ def load_offers(filename):
     offers = load_data(filename)
 
     for offer in offers:
-        new_offer = models.Offer(**offer)
+        new_offer = Offer(**offer)
         db.session.add(new_offer)
+        db.session.commit()
 
-print(models.Offer.get(1).to_dict)
+
+load_offers("offers.json")
+
+
 
 
 # Представление для получения всех пользователей методом get и post
@@ -99,19 +108,17 @@ print(models.Offer.get(1).to_dict)
 def get_all_users():
     if request.method == "GET":
         result = []
-        for user in models.User.query.all():
+        for user in User.query.all():
             result.append(user.to_dict())
         return jsonify(result), 200
     elif request.method == "POST":
         user_data = json.loads(request.data)
-        print(user_data)
-        new_user = models.User(**user_data)
-        print(new_user.to_dict())
+        new_user = User(**user_data)
         db.session.add(new_user)
         db.session.commit()
 
         result = []
-        for user in models.User.query.all():
+        for user in User.query.all():
             result.append(user.to_dict())
 
         return jsonify(result), 200
@@ -122,7 +129,7 @@ def get_all_users():
 @app.route('/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def get_user_by_id(uid):
     if request.method == "GET":
-        user = models.User.query.get(uid)
+        user = User.query.get(uid)
         return jsonify(user.to_dict()), 200
 
     if request.method == "PUT":
@@ -138,11 +145,11 @@ def get_user_by_id(uid):
         db.session.add(user)
         db.session.commit()
 
-        user = models.User.query(uid)
+        user = User.query(uid)
         return jsonify(user.to_dict()), 200
 
     if request.method == "DELETE":
-        user = models.User.query.get(uid)
+        user = User.query.get(uid)
         db.session.delete(user)
         db.session.commit()
 
@@ -155,19 +162,19 @@ def get_user_by_id(uid):
 def get_all_offers():
     if request.method == "GET":
         result = []
-        for offer in models.Offer.query.all():
+        for offer in Offer.query.all():
             result.append(offer.to_dict())
 
         return jsonify(result), 200.
 
     elif request.method == "POST":
         offer_data = json.loads(request.data)
-        new_offer = models.Order(**offer_data)
+        new_offer = Order(**offer_data)
         db.session.add(new_offer)
         db.session.commit()
 
         result = []
-        for offer in models.Offer.query.all():
+        for offer in Offer.query.all():
             result.append(offer.to_dict())
 
 
@@ -178,7 +185,7 @@ def get_all_offers():
 @app.route('/offers/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def get_offer_by_id(uid):
     if request.method == "GET":
-        offer = models.Offer.query.get(uid)
+        offer = Offer.query.get(uid)
         return jsonify(offer.to_dict()), 200
 
     if request_method == "PUT":
@@ -189,11 +196,11 @@ def get_offer_by_id(uid):
         db.session.add(offer)
         db.session.commit()
 
-        offer = models.Offer.query(uid)
+        offer = Offer.query(uid)
         return jsonify(offer.to_dict()), 200
 
     if request.method == "DELETE":
-        offer = models.User.query.get(uid)
+        offer = User.query.get(uid)
         db.session.delete(offer)
         db.session.commit()
 
@@ -205,18 +212,18 @@ def get_offer_by_id(uid):
 def get_all_orders():
     if request.method == "GET":
         result = []
-        for order in models.Order.query.all():
+        for order in Order.query.all():
             result.append(order.to_dict())
         return jsonify(result), 200.
 
     elif request.method == "POST":
         order_data = json.loads(request.data)
-        new_order = models.Order(**order_data)
+        new_order = Order(**order_data)
         db.session.add(new_order)
         db.session.commit()
 
         result = []
-        for order in models.Order.query.all():
+        for order in Order.query.all():
             result.append(order.to_dict())
 
         return jsonify(result), 200
@@ -226,7 +233,7 @@ def get_all_orders():
 @app.route('/orders/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def get_order_by_id(uid):
     if request.method == "GET":
-        order = models.Order.query.get(uid)
+        order = Order.query.get(uid)
         return jsonify(order.to_dict()), 200
 
     if request_method == "PUT":
@@ -244,17 +251,16 @@ def get_order_by_id(uid):
         db.session.add(order)
         db.session.commit()
 
-        order = models.User.query(uid)
+        order = User.query(uid)
         return jsonify(order.to_dict()), 200
 
     if request.method == "DELETE":
-        user = models.Order.query.get(uid)
+        user = Order.query.get(uid)
         db.session.delete(order)
         db.session.commit()
 
         return "", 204
 
-db.create_all()
 
 
 if __name__ == '__main__':
