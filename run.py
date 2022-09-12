@@ -69,6 +69,7 @@ def load_users():
         db.session.add(new_user)
         db.session.commit()
 
+load_users()
 
 
 # Загружаем json спиок с orders
@@ -81,6 +82,7 @@ def load_orders():
         db.session.add(new_order)
         db.session.commit()
 
+load_orders()
 
 
 
@@ -94,6 +96,7 @@ def load_offers():
         db.session.add(new_offer)
         db.session.commit()
 
+load_offers()
 
 
 
